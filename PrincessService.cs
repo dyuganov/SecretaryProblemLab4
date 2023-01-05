@@ -1,7 +1,5 @@
-﻿using System.Security.Principal;
-using SecretaryProblem4.model.interfaces;
+﻿using SecretaryProblem4.model.interfaces;
 using Microsoft.Extensions.Hosting;
-using SecretaryProblem4.model.interfaces;
 using SecretaryProblem4.model;
 
 namespace SecretaryProblem4;
@@ -18,20 +16,20 @@ public class PrincessService : IHostedService
         _princess = new Princess(friend);
         _appLifetime = appLifetime;
     }
-    
+
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _appLifetime.ApplicationStarted.Register(OnStarted);
         _appLifetime.ApplicationStopping.Register(OnStopping);
         _appLifetime.ApplicationStopped.Register(OnStopped);
-
         return Task.CompletedTask;
     }
-    
+
     public Task StopAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
+
     private void OnStarted()
     {
         Console.WriteLine(@"started");
@@ -41,15 +39,16 @@ public class PrincessService : IHostedService
             currentContender = _princess.MakeChoice(_hall.NextContender());
             if (currentContender != null) break;
         }
+
         Console.WriteLine($@"score: {GetFinalScore(currentContender)}");
         _appLifetime.StopApplication();
     }
-    
+
     private int GetFinalScore(IContender? contender)
     {
         const int notChosenValue = 10;
         if (contender == null) return notChosenValue;
-        
+
         const int firstScore = 20;
         const int thirdScore = 50;
         const int fifthScore = 100;
